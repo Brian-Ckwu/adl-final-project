@@ -206,7 +206,7 @@ if __name__ == "__main__":
         preprocess,
         remove_columns=[
             "free_messages",
-            "guided_messages", 
+            "guided_messages",
             "suggestions",
             "personas",
             "additional_context",
@@ -264,7 +264,7 @@ if __name__ == "__main__":
 
             print('context = \n{}'.format(context))
 
-            for turn in range(5):
+            for turn in range(6):
                 inputs = simulator_tokenizer(
                     [
                         "</s> <s>".join(
@@ -292,10 +292,13 @@ if __name__ == "__main__":
                     already_success = True
                     #break
 
+                if turn == 5:
+                    break
+
                 constrained_words = ''
                 bot_persona = ''
 
-                if turn >= 0 and turn < 4: 
+                if turn >= 0: 
                     #print('=================================== Analyzing Semantics ===================================')
                     use_transition = True
 
@@ -350,7 +353,8 @@ if __name__ == "__main__":
                     
                     #print(top_keyword)
                     bot_persona = " ".join(
-                            (['your persona:'] + top_keyword[0:2] + ['\nyour persona:'] + top_keyword[2:4])
+                            (['your persona:'] + (top_keyword[0:2] if top_keyword[0] != top_keyword[1] else [top_keyword[0]])\
+                            + ['\nyour persona:'] + (top_keyword[2:4] if top_keyword[2] != top_keyword[3] else [top_keyword[2]]))
                         )
 
                     print(bot_persona)
@@ -364,7 +368,8 @@ if __name__ == "__main__":
                 inputs = bot_tokenizer(
                     [
                         "</s> <s>".join(
-                            ([bot_persona] + dialog[-3:] if turn >= 2 else dialog[-3:])
+                            #([bot_persona] + dialog[-3:] if turn >= 2 else dialog[-3:])
+                            ([bot_persona] + dialog if len(dialog) < 3 else dialog[-3:])
                         )
                     ],
                     return_tensors="pt",
