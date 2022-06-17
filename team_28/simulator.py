@@ -233,7 +233,7 @@ if __name__ == "__main__":
             
             bot_decode_args = {
                 'do_sample': True,
-                'top_k':120,
+                'top_k': 120,
                 'top_p': 0.8,
                 'no_repeat_ngram_size': 4,
                 'repetition_penalty': 1.5,
